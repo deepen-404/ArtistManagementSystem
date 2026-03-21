@@ -11,7 +11,7 @@ public class UserRepository(DbConnection dbConnection)
         await using var connection = dbConnection.GetConnection();
         await connection.OpenAsync();
 
-        var query = "SELECT * FROM users WHERE email = @email";
+        var query = "SELECT id, first_name, last_name, email, password, phone, dob, gender::text, address, role::text, created_at, updated_at FROM users WHERE email = @email";
         await using var cmd = new NpgsqlCommand(query, connection);
         cmd.Parameters.AddWithValue("email", email);
 
@@ -28,7 +28,7 @@ public class UserRepository(DbConnection dbConnection)
         await using var connection = dbConnection.GetConnection();
         await connection.OpenAsync();
 
-        var query = "SELECT * FROM users WHERE id = @userId";
+        var query = "SELECT id, first_name, last_name, email, password, phone, dob, gender::text, address, role::text, created_at, updated_at FROM users WHERE id = @userId";
         await using var cmd = new NpgsqlCommand(query, connection);
         cmd.Parameters.AddWithValue("userId", userId);
 
@@ -49,7 +49,7 @@ public class UserRepository(DbConnection dbConnection)
         await using var countCmd = new NpgsqlCommand(countQuery, connection);
         var totalCount = Convert.ToInt32(await countCmd.ExecuteScalarAsync());
 
-        var query = @"SELECT id, first_name, last_name, email, password, phone, dob, gender, address, role, created_at, updated_at 
+        var query = @"SELECT id, first_name, last_name, email, password, phone, dob, gender::text, address, role::text, created_at, updated_at 
                       FROM users 
                       ORDER BY id DESC 
                       LIMIT @pageSize OFFSET @offset";

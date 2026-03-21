@@ -11,7 +11,7 @@ public class ArtistRepository(DbConnection dbConnection)
         await using var connection = dbConnection.GetConnection();
         await connection.OpenAsync();
 
-        var query = "SELECT * FROM artists WHERE id = @artistId";
+        var query = "SELECT id, name, dob, gender::text, address, first_release_year, no_of_albums_released, created_at, updated_at FROM artists WHERE id = @artistId";
         await using var cmd = new NpgsqlCommand(query, connection);
         cmd.Parameters.AddWithValue("artistId", artistId);
 
@@ -32,7 +32,7 @@ public class ArtistRepository(DbConnection dbConnection)
         await using var countCmd = new NpgsqlCommand(countQuery, connection);
         var totalCount = Convert.ToInt32(await countCmd.ExecuteScalarAsync());
 
-        var query = @"SELECT id, name, dob, gender, address, first_release_year, no_of_albums_released, created_at, updated_at 
+        var query = @"SELECT id, name, dob, gender::text, address, first_release_year, no_of_albums_released, created_at, updated_at 
                       FROM artists 
                       ORDER BY id DESC 
                       LIMIT @pageSize OFFSET @offset";
@@ -149,8 +149,7 @@ public class ArtistRepository(DbConnection dbConnection)
         var genderOrdinal = reader.GetOrdinal("gender");
         if (!reader.IsDBNull(genderOrdinal))
         {
-            var genderValue = reader.GetValue(genderOrdinal);
-            var genderString = genderValue?.ToString();
+            var genderString = reader.GetString(genderOrdinal);
             if (!string.IsNullOrEmpty(genderString) && Enum.TryParse<Gender>(genderString, out var parsedGender))
             {
                 gender = parsedGender;

@@ -11,7 +11,7 @@ public class MusicRepository(DbConnection dbConnection)
         await using var connection = dbConnection.GetConnection();
         await connection.OpenAsync();
 
-        var query = "SELECT * FROM music WHERE id = @musicId";
+        var query = "SELECT id, artist_id, title, album_name, genre::text, created_at, updated_at FROM music WHERE id = @musicId";
         await using var cmd = new NpgsqlCommand(query, connection);
         cmd.Parameters.AddWithValue("musicId", musicId);
 
@@ -33,7 +33,7 @@ public class MusicRepository(DbConnection dbConnection)
         countCmd.Parameters.AddWithValue("artistId", artistId);
         var totalCount = Convert.ToInt32(await countCmd.ExecuteScalarAsync());
 
-        var query = @"SELECT id, artist_id, title, album_name, genre, created_at, updated_at 
+        var query = @"SELECT id, artist_id, title, album_name, genre::text, created_at, updated_at 
                       FROM music 
                       WHERE artist_id = @artistId
                       ORDER BY id DESC 
@@ -117,8 +117,7 @@ public class MusicRepository(DbConnection dbConnection)
         MusicGenre genre = MusicGenre.rock;
         if (!reader.IsDBNull(genreOrdinal))
         {
-            var genreValue = reader.GetValue(genreOrdinal);
-            var genreString = genreValue?.ToString();
+            var genreString = reader.GetString(genreOrdinal);
             if (!string.IsNullOrEmpty(genreString) && Enum.TryParse<MusicGenre>(genreString, out var parsedGenre))
             {
                 genre = parsedGenre;
