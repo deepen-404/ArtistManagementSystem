@@ -64,17 +64,6 @@ John Doe,2020,1990-01-15,m,New York,5
 Jane Smith,2018,1992-05-20,f,Los Angeles,10
 ```
 
-### Columns
-
-| Column | Required | Description |
-|--------|----------|-------------|
-| name | Yes | Artist's full name |
-| first_release_year | Yes | Year of first release |
-| dob | No | Date of birth (YYYY-MM-DD) |
-| gender | No | m (male), f (female), o (other) |
-| address | No | Contact address |
-| no_of_albums_released | No | Number of albums released (default: 0) |
-
 ## Note on Requirement 3.1 — Login Page Registration Option
 The requirement states the login screen should have an option for new registration. This has intentionally not been implemented because this is an internal role-based system — allowing open registration would let anyone create an account and assign themselves any role including super_admin, which is a security risk. Instead, all user accounts are created and managed exclusively by the Super Admin via the User Management section after logging in.
 
