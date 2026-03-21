@@ -45,6 +45,7 @@ public class DatabaseInitializer(DbConnection dbConnection)
                 gender gender_type,
                 address VARCHAR(255),
                 role user_role NOT NULL DEFAULT 'artist',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );";
 

@@ -160,8 +160,7 @@ public class UserRepository(DbConnection dbConnection)
         UserRole role = UserRole.artist;
         if (!reader.IsDBNull(roleOrdinal))
         {
-            var roleValue = reader.GetValue(roleOrdinal);
-            var roleString = roleValue?.ToString();
+            var roleString = reader.GetString(roleOrdinal);
             if (!string.IsNullOrEmpty(roleString) && Enum.TryParse<UserRole>(roleString, out var parsedRole))
             {
                 role = parsedRole;
@@ -172,8 +171,7 @@ public class UserRepository(DbConnection dbConnection)
         var genderOrdinal = reader.GetOrdinal("gender");
         if (!reader.IsDBNull(genderOrdinal))
         {
-            var genderValue = reader.GetValue(genderOrdinal);
-            var genderString = genderValue?.ToString();
+            var genderString = reader.GetString(genderOrdinal);
             if (!string.IsNullOrEmpty(genderString) && Enum.TryParse<Gender>(genderString, out var parsedGender))
             {
                 gender = parsedGender;
