@@ -637,19 +637,42 @@ function showCsvModal() {
 
 function hideCsvModal() {
     document.getElementById('csvModal').classList.add('hidden');
+    document.getElementById('csvFile').value = '';
+    document.getElementById('uploadArea').querySelector('p').textContent = 'Drop your CSV file here or click to browse';
 }
 
 async function handleCsvImport(e) {
     e.preventDefault();
-    const file = document.getElementById('csvFile').files[0];
+    const fileInput = document.getElementById('csvFile');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        showToast('Please select a file first');
+        return;
+    }
+    
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+        showToast('Only CSV files are allowed');
+        return;
+    }
+    
     const formData = new FormData();
     formData.append('file', file);
     const res = await fetch(`${API_URL}/artists/import`, { method: 'POST', credentials: 'include', body: formData });
     const data = await res.json();
-    hideCsvModal();
-    loadArtists();
-    loadArtistDropdown();
-    showToast('Artists imported successfully', 'success');
+    
+    if (res.ok) {
+        fileInput.value = '';
+        document.getElementById('uploadArea').querySelector('p').textContent = 'Drop your CSV file here or click to browse';
+        hideCsvModal();
+        loadArtists();
+        loadArtistDropdown();
+        const imported = data.importedCount || 0;
+        const skipped = data.skippedCount || 0;
+        showToast(`Imported ${imported} artist(s), skipped ${skipped}`, 'success');
+    } else {
+        showToast(data.error || 'Import failed');
+    }
 }
 
 async function loadMusic() {

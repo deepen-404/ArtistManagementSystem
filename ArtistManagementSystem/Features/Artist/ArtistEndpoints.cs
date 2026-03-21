@@ -124,6 +124,12 @@ public static class ArtistEndpoints
                         continue;
                     }
 
+                    if (await artistRepository.ExistsByNameAsync(name))
+                    {
+                        skippedRows.Add($"Row {rowNumber}: Artist '{name}' already exists");
+                        continue;
+                    }
+
                     var record = new CreateArtistRequest
                     {
                         Name = name,

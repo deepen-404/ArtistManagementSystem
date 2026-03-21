@@ -119,6 +119,19 @@ public class ArtistRepository(DbConnection dbConnection)
         return rowsAffected > 0;
     }
 
+    public async Task<bool> ExistsByNameAsync(string name)
+    {
+        await using var connection = dbConnection.GetConnection();
+        await connection.OpenAsync();
+
+        var query = "SELECT COUNT(*) FROM artists WHERE LOWER(name) = LOWER(@name)";
+        await using var cmd = new NpgsqlCommand(query, connection);
+        cmd.Parameters.AddWithValue("name", name);
+
+        var count = Convert.ToInt32(await cmd.ExecuteScalarAsync());
+        return count > 0;
+    }
+
     public async Task<List<Artist>> CreateManyAsync(List<CreateArtistRequest> artistRequests)
     {
         var createdArtists = new List<Artist>();
