@@ -1,6 +1,6 @@
 # Artist Management System
 
-A .NET 8 Web API with React-like frontend for managing artists and their music.
+A .NET 8 Web API with HTML, CSS and JavaScript frontend for managing artists and their music.
 
 ## Tech Stack
 
@@ -52,6 +52,10 @@ dotnet run
 
 5. Access the frontend at: `http://localhost:5013/index.html`
 
+## Frontend
+
+The frontend code is located in `ArtistManagementSystem/wwwroot/`. It is plain HTML, CSS, and Vanilla JavaScript with no build step or framework required. It is served directly by the .NET app as static files, which means both frontend and backend run on the same origin (`http://localhost:5013`) — eliminating any CORS or cookie issues without needing a separate server or proxy.
+
 ## CSV Import
 
 A sample CSV file `sample_artists_import.csv` is provided in the parent directory for testing the import feature.
@@ -71,4 +75,3 @@ The requirement states the login screen should have an option for new registrati
 ## Note on Artist Import
 
 - Existing artists (matched by name, case-insensitive) will be skipped during import
-- The first two rows (header + first data row) in the sample file are valid for import
