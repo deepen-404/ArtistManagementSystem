@@ -274,6 +274,9 @@ function setupPermissions() {
     document.querySelectorAll('.tab-btn[data-tab="music"]').forEach(btn => {
         btn.classList.toggle('hidden', !isSuperAdmin && !isArtistManager && !isArtist);
     });
+    document.querySelectorAll('.back-btn').forEach(btn => {
+        btn.classList.toggle('hidden', !isSuperAdmin && !isArtistManager);
+    });
 }
 
 async function handleLogin(e) {
@@ -607,7 +610,11 @@ async function loadArtistDropdown() {
     if (!res.ok) return;
     const data = await res.json();
     const select = document.getElementById('artistSelect');
+    const currentValue = select.value;
     select.innerHTML = '<option value="">Select Artist</option>' + data.data.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+    if (currentValue) {
+        select.value = currentValue;
+    }
 }
 
 function viewArtistMusic(artistId) {
